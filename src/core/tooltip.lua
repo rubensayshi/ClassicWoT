@@ -10,7 +10,7 @@ _G.GameTooltip, _G.IsShiftKeyDown, _G.UnitName
 ---@field WoT ClassicWoTWoT
 local ClassicWoTTooltip = {}
 ClassicWoTTooltip.__index = ClassicWoTTooltip
-ClassicWoT.UnitPopup = ClassicWoTTooltip
+ClassicWoT.Tooltip = ClassicWoTTooltip
 
 setmetatable(ClassicWoTTooltip, {
     __call = function(cls, ...)
@@ -49,7 +49,7 @@ function ClassicWoTTooltip:OnTooltipSetUnit()
     end
 
     -- don't add WoT to own tooltip
-    if playerFull == self.Core.RealMe() then
+    if playerFull == self.Core:RealMe() then
         return
     end
 
