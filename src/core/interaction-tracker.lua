@@ -79,14 +79,15 @@ function ClassicWoTInteractionTracker:OnGroupRosterUpdate()
 
         for i = 1, numMembers do
             local playerName = GetRaidRosterInfo(i)
+            local playerFull = self.Core:PlayerFull(playerName)
 
-            if playerName ~= self.Core:RealMe() then
-                ClassicWoT:DebugPrint(playerName .. " is in the party")
+            if playerFull ~= self.Core:RealMe() then
+                ClassicWoT:DebugPrint(playerFull .. " is in the party")
 
-                self.DB.char.party[playerName].name = playerName
-                self.DB.char.party[playerName].joined = GetTime()
+                self.DB.char.party[playerFull].name = playerFull
+                self.DB.char.party[playerFull].joined = GetTime()
 
-                self:PlayerMet(playerName)
+                self:PlayerMet(playerFull)
             end
         end
 
@@ -94,17 +95,18 @@ function ClassicWoTInteractionTracker:OnGroupRosterUpdate()
     elseif numMembers > 1 then
         for i = 1, numMembers do
             local playerName = GetRaidRosterInfo(i)
+            local playerFull = self.Core:PlayerFull(playerName)
 
-            if playerName ~= self.Core:RealMe() then
-                ClassicWoT:DebugPrint(playerName .. " joined our party")
+            if playerFull ~= self.Core:RealMe() then
+                ClassicWoT:DebugPrint(playerFull .. " joined our party")
 
                 -- check if this person is new
-                if self.DB.char.party[playerName].name == nil then
+                if self.DB.char.party[playerFull].name == nil then
 
-                    self.DB.char.party[playerName].name = playerName
-                    self.DB.char.party[playerName].joined = GetTime()
+                    self.DB.char.party[playerFull].name = playerFull
+                    self.DB.char.party[playerFull].joined = GetTime()
 
-                    self:PlayerMet(playerName)
+                    self:PlayerMet(playerFull)
                 end
             end
         end
@@ -113,12 +115,12 @@ function ClassicWoTInteractionTracker:OnGroupRosterUpdate()
     self.DB.char.party.numMembers = numMembers
 end
 
-function ClassicWoTInteractionTracker:PlayerMet(playerName)
-    if playerName == self.Core:RealMe() then
+function ClassicWoTInteractionTracker:PlayerMet(playerFull)
+    if playerFull == self.Core:RealMe() then
         return
     end
 
-    local player = self.WoT:GetPlayerInfo(playerName)
+    local player = self.WoT:GetPlayerInfo(playerFull)
     if player ~= nil then
         if player.score ~= nil then
             ClassicWoT:Print(player.name .. " in our WoT, score: " .. player.score .. ", note: " .. player.note)
