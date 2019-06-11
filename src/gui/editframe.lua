@@ -34,6 +34,10 @@ function ClassicWoTEditFrame:ShowEditNoteFrame(data)
 
     local _self = self
 
+    if data.score == nil then
+        data.score = ClassicWoT.Config.Score.Default
+    end
+
     local frame = AGUI:Create("Window")
     frame:SetTitle("Edit WoT")
     frame:SetWidth(400)

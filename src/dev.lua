@@ -36,6 +36,8 @@ function ClassicWoT:wothistory()
             print(zone.name)
         end
     end
+
+    self.HistoryFrame:Show()
 end
 
 --[[

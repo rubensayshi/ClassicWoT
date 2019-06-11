@@ -28,3 +28,4 @@ src\core\unit-popup.lua
 src\core\tooltip.lua
 src\core\slashwho.lua
 src\gui\editframe.lua
+src\gui\historyframe.lua
