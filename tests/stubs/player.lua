@@ -27,6 +27,7 @@ _G.GetCurrentRegion = function()
 end
 
 _G.UnitFullName = function(target)
+    -- @TODO: returns name-server for cross realm, should make a test for this
     if target == "player" then
         return _G.UnitName(), _G.GetRealmName()
     else
@@ -48,5 +49,10 @@ _G.GetNumGroupMembers = function()
 end
 
 _G.GetRaidRosterInfo = function(i)
+    -- @TODO: returns name-server for cross realm, should make a test for this
+    if i == 1 then
+        return _G.UnitName()
+    end
+
     return "Player-" .. i
 end

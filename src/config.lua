@@ -1,11 +1,14 @@
 local ClassicWoT = _G.ClassicWoT
 
-ClassicWoT.Colors = {
+---@class ClassicWoTColors
+local ClassicWoTColors = {
     WHITE = "|cFFFFFFFF",
     SYSTEM_EVENT_YELLOW = "|cFFFFFF00",
 }
+ClassicWoT.Colors = ClassicWoTColors
 
-ClassicWoT.Config = {
+---@class ClassicWoTConfig
+local ClassicWoTConfig = {
     Debug = true,
     Trace = false,
     Score = {
@@ -29,3 +32,4 @@ ClassicWoT.Config = {
         SetPlayerInfo = "CWOT_SET_PLAYER_INFO",
     }
 }
+ClassicWoT.Config = ClassicWoTConfig
