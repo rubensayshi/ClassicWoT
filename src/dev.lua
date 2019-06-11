@@ -20,6 +20,13 @@ function ClassicWoT:wotiam(input)
 end
 
 --[[
+ClassicWoT:wothistory is our /wothistory handler, it shows the history frame
+--]]
+function ClassicWoT:wothistory()
+    self.HistoryFrame:Show()
+end
+
+--[[
 ClassicWoT:wotreset is our /wotreset handler, it resets the DB for debugging purposes
 --]]
 function ClassicWoT:wotreset()

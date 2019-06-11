@@ -14,6 +14,7 @@ local LibStub = _G.LibStub
 ---@field Tooltip ClassicWoTTooltip
 ---@field SlashWho ClassicWoTSlashWho
 ---@field EditFrame ClassicWoTEditFrame
+---@field HistoryFrame ClassicWoTHistoryFrame
 ClassicWoT = LibStub("AceAddon-3.0"):NewAddon("ClassicWoT", "AceConsole-3.0")
 
 function ClassicWoT:OnInitialize()
@@ -22,6 +23,7 @@ function ClassicWoT:OnInitialize()
     -- @TODO: these are related to the stuff in dev.lua...
     self:RegisterChatCommand("wot", "wot")
     self:RegisterChatCommand("wotreset", "wotreset")
+    self:RegisterChatCommand("wothistory", "wothistory")
     self:RegisterChatCommand("wotiam", "wotiam")
 
     -- determine who we are
@@ -34,6 +36,7 @@ function ClassicWoT:OnInitialize()
     self.WoT = ClassicWoT.WoT(self.Core, self.DB, self.Network, self.EventBus)
     self.InteractionTracker = ClassicWoT.InteractionTracker(self.Core, self.DB, self.EventBus, self.WoT)
     self.EditFrame = ClassicWoT.EditFrame(self.EventBus)
+    self.HistoryFrame = ClassicWoT.HistoryFrame(self.EventBus)
     self.UnitPopup = ClassicWoT.UnitPopup(self.Core, self.WoT, self.EditFrame)
     self.Tooltip = ClassicWoT.Tooltip(self.Core, self.WoT)
     self.SlashWho = ClassicWoT.SlashWho(self.Core, self.WoT)
