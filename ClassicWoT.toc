@@ -10,7 +10,7 @@
 libs.xml
 
 src\main.lua
-src\src.lua
+src\dev.lua
 src\config.lua
 src\defaultdb.lua
 src\util\util.lua

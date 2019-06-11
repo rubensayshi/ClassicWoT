@@ -3,6 +3,8 @@ local LibStub = _G.LibStub
 
 -- Addon global
 ---@class ClassicWoT
+---@field Config ClassicWoTConfig
+---@field Colors ClassicWoTColors
 ---@field Core ClassicWoTCore
 ---@field Network ClassicWoTNetwork
 ---@field EventBus ClassicWoTEventBus

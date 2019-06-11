@@ -38,17 +38,17 @@ function ClassicWoTWoT.new(Core, DB, Network, EventBus)
     return self
 end
 
-function ClassicWoTWoT:GetPlayerInfo(name)
-    if self.DB.realm.wot[name].name == nil then
+function ClassicWoTWoT:GetPlayerInfo(playerFull)
+    if self.DB.realm.wot[playerFull].name == nil then
         return nil
     else
-        return self.DB.realm.wot[name]
+        return self.DB.realm.wot[playerFull]
     end
 end
 
-function ClassicWoTWoT:IsTrusted(name)
-    return self.DB.realm.wot[name].score ~= nil
-            and self.DB.realm.wot[name].score >= ClassicWoT.Config.Score.Trusted
+function ClassicWoTWoT:IsTrusted(playerFull)
+    return self.DB.realm.wot[playerFull].score ~= nil
+            and self.DB.realm.wot[playerFull].score >= ClassicWoT.Config.Score.Trusted
 end
 
 function ClassicWoTWoT:OnSetPlayerInfo(data)
