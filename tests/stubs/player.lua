@@ -35,8 +35,13 @@ _G.UnitFullName = function(target)
     end
 end
 
-_G.GetTime = function()
-    return 60123.558
+local realZoneText = "Ironforge"
+_G.SetRealZoneText = function(zoneText)
+    realZoneText = zoneText
+end
+
+_G.GetRealZoneText = function()
+    return realZoneText
 end
 
 local numGroupMembers = 0

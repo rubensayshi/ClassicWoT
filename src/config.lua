@@ -17,6 +17,7 @@ local ClassicWoTConfig = {
         Max = 5,
         Trusted = 4,
     },
+    CURRENT_GROUP = "CURRENT_GROUP",
     Network = {
         Prefix = "CWOT",
         Channel = {
@@ -26,10 +27,10 @@ local ClassicWoTConfig = {
         Events = {
             SetScore = "CWOT_NE_SET_SCORE",
             RequestScores = "CWOT_NE_REQUEST_SCORES",
-        }
+        },
     },
     Events = {
         SetPlayerInfo = "CWOT_SET_PLAYER_INFO",
-    }
+    },
 }
 ClassicWoT.Config = ClassicWoTConfig

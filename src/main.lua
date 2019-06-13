@@ -14,6 +14,7 @@ local LibStub = _G.LibStub
 ---@field Tooltip ClassicWoTTooltip
 ---@field SlashWho ClassicWoTSlashWho
 ---@field EditFrame ClassicWoTEditFrame
+---@field DefaultDB ClassicWoTDefaultDB
 ClassicWoT = LibStub("AceAddon-3.0"):NewAddon("ClassicWoT", "AceConsole-3.0")
 
 function ClassicWoT:OnInitialize()
@@ -23,6 +24,7 @@ function ClassicWoT:OnInitialize()
     self:RegisterChatCommand("wot", "wot")
     self:RegisterChatCommand("wotreset", "wotreset")
     self:RegisterChatCommand("wotiam", "wotiam")
+    self:RegisterChatCommand("wothistory", "wothistory")
 
     -- determine who we are
     local player, realm = UnitFullName("player")

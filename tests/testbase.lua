@@ -22,6 +22,8 @@ require("core.core")
 require("core.wot")
 require("core.event-bus")
 require("core.interaction-tracker")
+require("core.current-group")
+require("core.historical-group")
 require("networking.network")
 
 return ClassicWoT
