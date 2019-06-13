@@ -11,8 +11,8 @@ Objects sent are serialized and chunked to fit max size of messages.
 local ClassicWoT = _G.ClassicWoT
 
 -- WoW API
-local CreateFrame, GetTime, C_ChatInfo, JoinChannelByName, GetChannelList =
-_G.CreateFrame, _G.GetTime, _G.C_ChatInfo, _G.JoinChannelByName, _G.GetChannelList
+local CreateFrame, C_ChatInfo, JoinChannelByName, GetChannelList =
+_G.CreateFrame, _G.C_ChatInfo, _G.JoinChannelByName, _G.GetChannelList
 
 -- Libs
 local LibStub = _G.LibStub
@@ -39,8 +39,6 @@ function ClassicWoTNetwork.new(Core, EventBus)
     self.Core = Core
     self.EventBus = EventBus
     self.MessageBuffer = {}
-    self.SendingInterval = 20000
-    self.LastMessageSend = GetTime()
 
     -- create a Frame to use as thread to recieve messages on
     self.NetworkThread = CreateFrame("Frame")

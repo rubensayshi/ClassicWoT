@@ -23,3 +23,22 @@ function ClassicWoT:TracePrint(message)
         print("|cFF7777FFClassicWoT Trace:|cFFFFFFFF", message)
     end
 end
+
+function ClassicWoT:DebugPrintTable(t)
+    local function dump(o)
+        if type(o) == "table" then
+            local s = "{ "
+            for k,v in pairs(o) do
+                s = s .. "[" .. k .. "] = " .. dump(v) .. ", "
+            end
+            return s .. "} "
+        else
+            return tostring(o)
+        end
+    end
+
+    if (self.Config.Debug == true) then
+        print("|cFF7777FFClassicWoT Debug:|cFFFFFFFF table...")
+        print(dump(t))
+    end
+end

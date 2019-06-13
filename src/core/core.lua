@@ -1,6 +1,9 @@
 -- Addon global
 local ClassicWoT = _G.ClassicWoT
 
+-- WoW API
+local time = _G.time
+
 ---@class ClassicWoTCore
 local ClassicWoTCore = {}
 ClassicWoTCore.__index = ClassicWoTCore
@@ -36,4 +39,8 @@ end
 
 function ClassicWoTCore:RealMe()
     return self.realme
+end
+
+function ClassicWoTCore:Now()
+    return time()
 end

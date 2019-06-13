@@ -20,6 +20,25 @@ function ClassicWoT:wotiam(input)
 end
 
 --[[
+ClassicWoT:wothistory is our /wothistory handler
+--]]
+function ClassicWoT:wothistory()
+    print("groups: " .. #self.InteractionTracker:GetGroupHistory() .. "/" .. self.DB.char.groupHistoryCount)
+
+    for groupID, group in pairs(self.InteractionTracker:GetGroupHistory()) do
+        print("Group #" .. groupID)
+
+        for _, player in pairs(group.dbEntry.players) do
+            print(player.name)
+        end
+
+        for _, zone in pairs(group.dbEntry.zones) do
+            print(zone.name)
+        end
+    end
+end
+
+--[[
 ClassicWoT:wotreset is our /wotreset handler, it resets the DB for debugging purposes
 --]]
 function ClassicWoT:wotreset()
