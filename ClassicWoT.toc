@@ -20,6 +20,7 @@ src\util\chat.lua
 src\networking\network.lua
 src\core\event-bus.lua
 src\core\wot.lua
+src\core\chatlink.lua
 src\core\interaction-tracker.lua
 src\core\core.lua
 src\core\unit-popup.lua

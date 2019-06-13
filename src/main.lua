@@ -13,6 +13,7 @@ local LibStub = _G.LibStub
 ---@field UnitPopup ClassicWoTUnitPopup
 ---@field Tooltip ClassicWoTTooltip
 ---@field SlashWho ClassicWoTSlashWho
+---@field ChatLink ClassicWoTChatLink
 ---@field EditFrame ClassicWoTEditFrame
 ClassicWoT = LibStub("AceAddon-3.0"):NewAddon("ClassicWoT", "AceConsole-3.0")
 
@@ -37,6 +38,7 @@ function ClassicWoT:OnInitialize()
     self.UnitPopup = ClassicWoT.UnitPopup(self.Core, self.WoT, self.EditFrame)
     self.Tooltip = ClassicWoT.Tooltip(self.Core, self.WoT)
     self.SlashWho = ClassicWoT.SlashWho(self.Core, self.WoT)
+    self.ChatLink = ClassicWoT.ChatLink(self.Core, self.WoT)
 
     self:DebugPrint("me: " .. self.Core:RealMe())
 end
@@ -56,4 +58,5 @@ function ClassicWoT:OnEnable()
 
     -- watch /who results
     self.SlashWho:Hook()
+    self.ChatLink:Hook()
 end
