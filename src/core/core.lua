@@ -1,4 +1,4 @@
-﻿-- Addon global
+-- Addon global
 local ClassicWoT = _G.ClassicWoT
 
 ---@class ClassicWoTCore
