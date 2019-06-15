@@ -18,8 +18,13 @@ _G.UnitFactionGroup = function()
     return "Alliance"
 end
 
+local locale = "enUS"
+_G.SetLocale = function(_locale)
+    locale = _locale
+end
+
 _G.GetLocale = function()
-    return "enUS"
+    return locale
 end
 
 _G.GetCurrentRegion = function()
@@ -36,8 +41,8 @@ _G.UnitFullName = function(target)
 end
 
 local realZoneText = "Ironforge"
-_G.SetRealZoneText = function(zoneText)
-    realZoneText = zoneText
+_G.SetRealZoneText = function(_realZoneText)
+    realZoneText = _realZoneText
 end
 
 _G.GetRealZoneText = function()

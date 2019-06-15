@@ -5,7 +5,10 @@ local LibStub = _G.LibStub
 local ClassicWoT = _G.ClassicWoT
 
 -- deps
-local AGUI = LibStub("AceGUI-3.0")
+local AceGUI = LibStub("AceGUI-3.0")
+
+-- WoW API
+local date = _G.date
 
 ---@class ClassicWoTHistoryFrame
 local ClassicWoTHistoryFrame = {}
@@ -17,9 +20,11 @@ setmetatable(ClassicWoTHistoryFrame, {
     end,
 })
 
-function ClassicWoTHistoryFrame.new(EventBus, EditFrame)
+function ClassicWoTHistoryFrame.new(InteractionTracker, WoT, EventBus, EditFrame)
     local self = setmetatable({}, ClassicWoTHistoryFrame)
 
+    self.InteractionTracker = InteractionTracker
+    self.WoT = WoT
     self.EventBus = EventBus
     self.EditFrame = EditFrame
     self.frame = nil
@@ -36,7 +41,7 @@ function ClassicWoTHistoryFrame:Show()
 
     local _self = self
 
-    local frame = AGUI:Create("Window")
+    local frame = AceGUI:Create("Window")
     frame:SetLayout("Flow")
     frame:SetTitle("Web of Trust")
     frame:SetWidth(500)
@@ -47,7 +52,7 @@ function ClassicWoTHistoryFrame:Show()
         _self.frame = nil
     end)
 
-    local tabs = AGUI:Create("TabGroup")
+    local tabs = AceGUI:Create("TabGroup")
     tabs:SetLayout("Flow")
     tabs:SetFullWidth(true)
     tabs:SetFullHeight(true)
@@ -60,12 +65,12 @@ function ClassicWoTHistoryFrame:Show()
     self.frame = frame
     self.tabs = tabs
 
-    self:ShowTab()
+    self:ShowGroupHistoryTab()
 
     self.frame:DoLayout()
 end
 
-function ClassicWoTHistoryFrame:ShowTab()
+function ClassicWoTHistoryFrame:ShowGroupHistoryTab()
     local DUMMY = {
         ZONES = {
             "Dire Maul", "Deadmines", "Arathi Basin", "Westfall", "Ironforge", "Molten Core",
@@ -76,83 +81,93 @@ function ClassicWoTHistoryFrame:ShowTab()
     }
 
     -- tab needs a container
-    local frame = AGUI:Create("SimpleGroup")
+    local frame = AceGUI:Create("SimpleGroup")
     frame:SetLayout("Flow")
     frame:SetFullWidth(true)
     frame:SetFullHeight(true)
     self.tabs:AddChild(frame)
 
-    local scrolltainer = AGUI:Create("SimpleGroup")
+    local scrolltainer = AceGUI:Create("SimpleGroup")
     scrolltainer:SetLayout("Fill") -- important! first child fills container
     scrolltainer:SetFullWidth(true)
     scrolltainer:SetFullHeight(true)
     frame:AddChild(scrolltainer)
 
-    local scroll = AGUI:Create("ScrollFrame")
+    local scroll = AceGUI:Create("ScrollFrame")
     scroll:SetLayout("Flow")
     scroll:SetFullWidth(true)
     scroll:SetFullHeight(true)
     scrolltainer:AddChild(scroll)
 
-    for i = 0, 40 do
-        local groupRow = AGUI:Create("InlineGroup")
-        groupRow:SetTitle("Grouped with x people from YYYY-MM-DD HH:II:SS till HH:II:SS")
+    for groupID, group in pairs(self.InteractionTracker:GetGroupHistory()) do
+        local groupRow = AceGUI:Create("InlineGroup")
+
+        -- @TODO: pretty print duration
+        groupRow:SetTitle("Grouped with " .. ClassicWoT.table.cnt(group.dbEntry.players) .. " players " .. 
+        "on " .. date("%A, %B %#d", group.dbEntry.started) .. " for " .. group:Duration() .. "ms")
         groupRow:SetLayout("Flow")
         groupRow:SetRelativeWidth(1.0)
         scroll:AddChild(groupRow)
 
-        local zones = AGUI:Create("SimpleGroup")
+        local zones = AceGUI:Create("SimpleGroup")
         zones:SetLayout("Flow")
         zones:SetRelativeWidth(1.0)
         groupRow:AddChild(zones)
         
-        for i = 1, 6 do
-            local zone = AGUI:Create("Label")
-            zone:SetWidth(100)
-            zone:SetText(DUMMY.ZONES[i])
+        if (ClassicWoT.table.cnt(group.dbEntry.zones)) == 0 then
+            local zoneLabel = AceGUI:Create("Label")
+            zoneLabel:SetWidth(100)
+            zoneLabel:SetText("Some zone")
 
-            zones:AddChild(zone)
+            zones:AddChild(zoneLabel)
         end
 
-        local players = AGUI:Create("SimpleGroup")
+        for _, zone in pairs(group.dbEntry.zones) do
+            local zoneLabel = AceGUI:Create("Label")
+            zoneLabel:SetWidth(100)
+            zoneLabel:SetText(zone.name)
+
+            zones:AddChild(zoneLabel)
+        end
+
+        local players = AceGUI:Create("SimpleGroup")
         players:SetLayout("Flow")
         players:SetRelativeWidth(1.0)
         groupRow:AddChild(players)
 
-        for i = 1, 5 do
-            local data = {
-                name = DUMMY.PLAYERS[i],
-                score = 4,
-                note = "",
-            }
-
-            if i == 1 then
-                data.score = nil
+        for _, player in pairs(group.dbEntry.players) do
+            local playerInfo = self.WoT:GetPlayerInfo(player.name)
+            if playerInfo == nil then
+                playerInfo = {
+                    name = player.name,
+                    score = nil,
+                    note = "",
+                }
             end
 
-            local playerRow = AGUI:Create("SimpleGroup")
+            local playerRow = AceGUI:Create("SimpleGroup")
             playerRow:SetLayout("Flow")
             playerRow:SetRelativeWidth(0.5)
             players:AddChild(playerRow)
 
-            local player = AGUI:Create("InteractiveLabel")
+            local player = AceGUI:Create("InteractiveLabel")
             player:SetWidth(100)
-            player:SetText(DUMMY.PLAYERS[i])
+            player:SetText(playerInfo.name)
             playerRow:AddChild(player)
 
-            local score = AGUI:Create("InteractiveLabel")
+            local score = AceGUI:Create("InteractiveLabel")
             score:SetWidth(100)
-            if data.score ~= nil then
-                score:SetText("score: " .. data.score)
+            if playerInfo.score ~= nil then
+                score:SetText("score: " .. playerInfo.score)
             else
                 score:SetText("score: nil")
             end
             score:SetCallback("OnClick", function (button)
-                ClassicWoT:DebugPrint("cliiiiick: " .. i .. "; " .. DUMMY.PLAYERS[i])
+                ClassicWoT:DebugPrint("cliiiiick: " .. playerInfo.name)
 
                 self.EditFrame:ShowEditNoteFrame({
-                    name = DUMMY.PLAYERS[i],
-                    score = data.score,
+                    name = playerInfo.name,
+                    score = playerInfo.score,
                     note = "",
                 })
             end)
