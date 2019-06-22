@@ -58,6 +58,7 @@ function ClassicWoTHistoryFrame:Show()
     tabs:SetFullHeight(true)
     tabs:SetTabs({
         {value = "TAB_GROUP_HISTORY", text = "Group History", },
+        {value = "TAB_WOT", text = "Your WoT", },
     })
     tabs:SelectTab("TAB_GROUP_HISTORY")
     frame:AddChild(tabs)
@@ -67,6 +68,7 @@ function ClassicWoTHistoryFrame:Show()
 
     self:ShowGroupHistoryTab()
 
+    -- trigger redraw of layout
     self.frame:DoLayout()
 end
 
@@ -165,11 +167,15 @@ function ClassicWoTHistoryFrame:ShowGroupHistoryTab()
             score:SetCallback("OnClick", function (button)
                 ClassicWoT:DebugPrint("cliiiiick: " .. playerInfo.name)
 
+                -- @TODO: can we get updates from edit frame to update the score here?
                 self.EditFrame:ShowEditNoteFrame({
                     name = playerInfo.name,
                     score = playerInfo.score,
                     note = "",
                 })
+
+                -- attach the edit frame to the history frame
+                self.EditFrame.frame.frame:SetPoint("TOPLEFT", self.frame.frame, "TOPRIGHT")
             end)
             playerRow:AddChild(score)
         end

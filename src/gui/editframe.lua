@@ -40,7 +40,7 @@ function ClassicWoTEditFrame:ShowEditNoteFrame(data)
 
     local frame = AGUI:Create("Window")
     frame:SetTitle("Edit WoT")
-    frame:SetWidth(400)
+    frame:SetWidth(300)
     frame:SetHeight(250)
     frame:SetLayout("Flow")
     frame:SetCallback("OnClose", function(widget)
