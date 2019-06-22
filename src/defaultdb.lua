@@ -23,6 +23,7 @@ local ClassicWoTDefaultDB = {
         },
     },
     char = {
+        lastOnline = nil,
         groupHistoryCount = 0,
         groupHistory = {
             -- ["CURRENT"] is our magic current group key

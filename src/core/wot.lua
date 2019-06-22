@@ -40,15 +40,25 @@ end
 
 function ClassicWoTWoT:GetPlayerInfo(playerFull)
     if self.DB.realm.wot[playerFull].name == nil then
+        -- AceDB will initialize the entry with defaults, 
+        -- we need to unset to avoid lots of unused entries
+        self.DB.realm.wot[playerFull] = nil
         return nil
     else
         return self.DB.realm.wot[playerFull]
     end
 end
 
+function ClassicWoTWoT:GetPlayers()
+    return self.DB.realm.wot
+end
+
 function ClassicWoTWoT:IsTrusted(playerFull)
-    return self.DB.realm.wot[playerFull].score ~= nil
-            and self.DB.realm.wot[playerFull].score >= ClassicWoT.Config.Score.Trusted
+    local playerInfo = self:GetPlayerInfo(playerFull)
+
+    return playerInfo ~= nil and 
+            playerInfo.score ~= nil
+            and playerInfo.score >= ClassicWoT.Config.Score.Trusted
 end
 
 function ClassicWoTWoT:OnSetPlayerInfo(data)

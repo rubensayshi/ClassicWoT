@@ -31,12 +31,16 @@ function ClassicWoTInteractionTracker.new(Core, DB, EventBus, WoT)
     self.EventBus = EventBus
     self.WoT = WoT
 
+    -- init lastOnline if neccesary
+    if self.DB.char.lastOnline == nil then
+        self.DB.char.lastOnline = Core:Now()
+    end
+
     self.CurrentGroup = ClassicWoT.CurrentGroup(self.Core, DB.char.groupHistory[CURRENT_GROUP])
 
     -- reset the current group if there was still info pending from previous session
-    -- @TODO: how do we determine the ended time if we disconnected while in a group and got back online and were out
     if GetNumGroupMembers() == 0 then
-        self:ResetCurrentGroup()
+        self:ResetCurrentGroup(self.DB.char.lastOnline)
     else
         -- @TODO: we need to sync
         -- self:OnGroupRosterUpdate()
@@ -59,7 +63,24 @@ function ClassicWoTInteractionTracker.new(Core, DB, EventBus, WoT)
         end
     end)
 
+    self.Ticker = nil
+
     return self
+end
+
+function ClassicWoTInteractionTracker:InitLastOnlineTicker()
+    if self.Ticker ~= nil then
+        return
+    end
+
+    self.Ticker = C_Timer.NewTicker(60, function()
+        self:UpdateLastOnline()
+    end)
+end
+
+function ClassicWoTInteractionTracker:UpdateLastOnline()
+    ClassicWoT:DebugPrint("UpdateLastOnline")
+    self.DB.char.lastOnline = self.Core:Now()
 end
 
 ---@return ClassicWoTHistoricalGroup[]
@@ -79,11 +100,11 @@ function ClassicWoTInteractionTracker:GetGroupHistory()
     return groups
 end
 
-function ClassicWoTInteractionTracker:ResetCurrentGroup()
+function ClassicWoTInteractionTracker:ResetCurrentGroup(lastOnline)
     ClassicWoT:DebugPrint("ResetCurrentGroup")
     -- need to wrap up the previous group
     if not self.CurrentGroup:IsNew() then
-        self.CurrentGroup:Ended()
+        self.CurrentGroup:Ended(lastOnline)
 
         -- increment our counter, and use the counter as ID for the group
         self.DB.char.groupHistoryCount = self.DB.char.groupHistoryCount + 1

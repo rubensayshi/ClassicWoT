@@ -19,6 +19,7 @@ local LibStub = _G.LibStub
 ClassicWoT = LibStub("AceAddon-3.0"):NewAddon("ClassicWoT", "AceConsole-3.0")
 
 function ClassicWoT:OnInitialize()
+    -- @TODO: maybe we should move most to OnEnable?
     self.DB = LibStub("AceDB-3.0"):New("ClassicWoT_DB", ClassicWoT.DefaultDB, true)
 
     -- @TODO: these are related to the stuff in dev.lua...
@@ -27,8 +28,9 @@ function ClassicWoT:OnInitialize()
     self:RegisterChatCommand("wotreset", "wotreset")
     self:RegisterChatCommand("wothistory", "wothistory")
 
-    -- determine who we are
+    -- determine who we are, realm can be nil during OnInitialize ...
     local player, realm = UnitFullName("player")
+    self:DebugPrint("me: " .. player  .. ", " .. tostring(realm))
 
     -- init components (should have minimal side effects)
     self.Core = ClassicWoT.Core(player, realm)
@@ -49,6 +51,12 @@ function ClassicWoT:OnEnable()
     -- debug print, will also help us know if debugging is enabled
     self:DebugPrint("ClassicWoT:OnEnable")
 
+    -- determine who we are, because realm could have been nil during OnInitialize
+    local player, realm = UnitFullName("player")
+    self:DebugPrint("me: " .. player  .. ", " .. tostring(realm))
+    self.Core:InitMe(player, realm)
+    self:DebugPrint("me: " .. self.Core:RealMe())
+
     -- init the chat channel we use for "networking"
     self.Network:InitChannel()
 
@@ -60,4 +68,7 @@ function ClassicWoT:OnEnable()
 
     -- watch /who results
     self.SlashWho:Hook()
+
+    -- periodically update last online timestamp
+    self.InteractionTracker:InitLastOnlineTicker()
 end

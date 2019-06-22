@@ -18,19 +18,28 @@ setmetatable(ClassicWoTCore, {
 function ClassicWoTCore.new(player, realm)
     local self = setmetatable({}, ClassicWoTCore)
 
-    self.realm = realm
-    self.realme = self:PlayerFull(player, realm)
-    self.me = self.realme
+    self.InitMe(self, player, realm)
 
     return self
 end
 
-function ClassicWoTCore:PlayerFull(name, realm)
+function ClassicWoTCore:InitMe(player, realm)
+    ClassicWoT:DebugPrint("InitMe: " .. tostring(player)  .. ", " .. tostring(realm))
+    if realm == nil then
+        realm = "NaN"
+    end
+
+    self.realm = realm
+    self.realme = self:PlayerFull(player, realm)
+    self.me = self.realme
+end
+
+function ClassicWoTCore:PlayerFull(player, realm)
     if realm == nil then
         realm = self.realm
     end
 
-    return name .. "-" .. realm
+    return player .. "-" .. realm
 end
 
 function ClassicWoTCore:Me()

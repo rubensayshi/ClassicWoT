@@ -60,16 +60,36 @@ function ClassicWoTHistoryFrame:Show()
         {value = "TAB_GROUP_HISTORY", text = "Group History", },
         {value = "TAB_WOT", text = "Your WoT", },
     })
-    tabs:SelectTab("TAB_GROUP_HISTORY")
+    -- register tab handler callback
+    tabs:SetCallback("OnGroupSelected", function(...) 
+        _self:OnSelectTab(...)
+    end)
     frame:AddChild(tabs)
 
     self.frame = frame
     self.tabs = tabs
 
-    self:ShowGroupHistoryTab()
+    -- select tab, this will fire callback!
+    tabs:SelectTab("TAB_GROUP_HISTORY")
 
     -- trigger redraw of layout
     self.frame:DoLayout()
+end
+
+function ClassicWoTHistoryFrame:OnSelectTab(container, event, group)
+    if event ~= "OnGroupSelected" then
+        return
+    end
+
+    -- clear the old content
+    container:ReleaseChildren()
+
+    -- render the relevant tab
+    if group == "TAB_GROUP_HISTORY" then
+        self:ShowGroupHistoryTab()
+    elseif group == "TAB_WOT" then
+        self:ShowWoTTab()
+    end
 end
 
 function ClassicWoTHistoryFrame:ShowGroupHistoryTab()
@@ -106,7 +126,7 @@ function ClassicWoTHistoryFrame:ShowGroupHistoryTab()
 
         -- @TODO: pretty print duration
         groupRow:SetTitle("Grouped with " .. ClassicWoT.table.cnt(group.dbEntry.players) .. " players " .. 
-        "on " .. date("%A, %B %#d", group.dbEntry.started) .. " for " .. group:Duration() .. "ms")
+        "on " .. date("%A, %B %#d", group.dbEntry.started) .. " for " .. group:Duration() .. "s")
         groupRow:SetLayout("Flow")
         groupRow:SetRelativeWidth(1.0)
         scroll:AddChild(groupRow)
@@ -179,6 +199,90 @@ function ClassicWoTHistoryFrame:ShowGroupHistoryTab()
             end)
             playerRow:AddChild(score)
         end
+    end
+
+    -- trigger layout update to fix blank first row 
+    scroll:DoLayout() 
+end
+
+function ClassicWoTHistoryFrame:ShowWoTTab()
+    -- tab needs a container
+    local frame = AceGUI:Create("SimpleGroup")
+    frame:SetLayout("Flow")
+    frame:SetFullWidth(true)
+    frame:SetFullHeight(true)
+    self.tabs:AddChild(frame)
+
+    local scrolltainer = AceGUI:Create("SimpleGroup")
+    scrolltainer:SetLayout("Fill") -- important! first child fills container
+    scrolltainer:SetFullWidth(true)
+    scrolltainer:SetFullHeight(true)
+    frame:AddChild(scrolltainer)
+
+    local scroll = AceGUI:Create("ScrollFrame")
+    scroll:SetLayout("Flow")
+    scroll:SetFullWidth(true)
+    scroll:SetFullHeight(true)
+    scrolltainer:AddChild(scroll)
+
+    for k, playerInfo in pairs(self.WoT:GetPlayers()) do
+
+        print("k: " .. k)
+        print("n: " .. tostring(playerInfo.name))
+
+        local playerRow = AceGUI:Create("SimpleGroup")
+        playerRow:SetLayout("Flow")
+        playerRow:SetRelativeWidth(1.0)
+        scroll:AddChild(playerRow)
+
+        local player = AceGUI:Create("InteractiveLabel")
+        player:SetRelativeWidth(0.5)
+        player:SetText(playerInfo.name)
+        playerRow:AddChild(player)
+
+        local score = AceGUI:Create("InteractiveLabel")
+        score:SetRelativeWidth(0.2)
+        if playerInfo.score ~= nil then
+            score:SetText("score: " .. playerInfo.score)
+        else
+            score:SetText("score: nil")
+        end
+        score:SetCallback("OnClick", function (button)
+            ClassicWoT:DebugPrint("cliiiiick: " .. playerInfo.name)
+
+            -- @TODO: can we get updates from edit frame to update the score here?
+            self.EditFrame:ShowEditNoteFrame({
+                name = playerInfo.name,
+                score = playerInfo.score,
+                note = "",
+            })
+
+            -- attach the edit frame to the history frame
+            self.EditFrame.frame.frame:SetPoint("TOPLEFT", self.frame.frame, "TOPRIGHT")
+        end)
+        playerRow:AddChild(score)
+
+        local note = AceGUI:Create("InteractiveLabel")
+        note:SetRelativeWidth(0.2)
+        if playerInfo.note ~= "" then
+            note:SetText("note: " .. playerInfo.note)
+        else
+            note:SetText("note: nil")
+        end
+        note:SetCallback("OnClick", function (button)
+            ClassicWoT:DebugPrint("cliiiiick: " .. playerInfo.name)
+
+            -- @TODO: can we get updates from edit frame to update the note here?
+            self.EditFrame:ShowEditNoteFrame({
+                name = playerInfo.name,
+                score = playerInfo.score,
+                note = playerInfo.note,
+            })
+
+            -- attach the edit frame to the history frame
+            self.EditFrame.frame.frame:SetPoint("TOPLEFT", self.frame.frame, "TOPRIGHT")
+        end)
+        playerRow:AddChild(note)
     end
 
     -- trigger layout update to fix blank first row 
