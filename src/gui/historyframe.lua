@@ -57,11 +57,11 @@ function ClassicWoTHistoryFrame:Show()
     tabs:SetFullWidth(true)
     tabs:SetFullHeight(true)
     tabs:SetTabs({
-        {value = "TAB_GROUP_HISTORY", text = "Group History", },
-        {value = "TAB_WOT", text = "Your WoT", },
+        { value = "TAB_GROUP_HISTORY", text = "Group History", },
+        { value = "TAB_WOT", text = "Your WoT", },
     })
     -- register tab handler callback
-    tabs:SetCallback("OnGroupSelected", function(...) 
+    tabs:SetCallback("OnGroupSelected", function(...)
         _self:OnSelectTab(...)
     end)
     frame:AddChild(tabs)
@@ -93,15 +93,6 @@ function ClassicWoTHistoryFrame:OnSelectTab(container, event, group)
 end
 
 function ClassicWoTHistoryFrame:ShowGroupHistoryTab()
-    local DUMMY = {
-        ZONES = {
-            "Dire Maul", "Deadmines", "Arathi Basin", "Westfall", "Ironforge", "Molten Core",
-        },
-        PLAYERS = {
-            "Nub", "Yoda", "LukeSkycrawler", "Thrall", "YoMama",
-        },
-    }
-
     -- tab needs a container
     local frame = AceGUI:Create("SimpleGroup")
     frame:SetLayout("Flow")
@@ -121,12 +112,12 @@ function ClassicWoTHistoryFrame:ShowGroupHistoryTab()
     scroll:SetFullHeight(true)
     scrolltainer:AddChild(scroll)
 
-    for groupID, group in pairs(self.InteractionTracker:GetGroupHistory()) do
+    for _, group in pairs(self.InteractionTracker:GetGroupHistory()) do
         local groupRow = AceGUI:Create("InlineGroup")
 
         -- @TODO: pretty print duration
-        groupRow:SetTitle("Grouped with " .. ClassicWoT.table.cnt(group.dbEntry.players) .. " players " .. 
-        "on " .. date("%A, %B %#d", group.dbEntry.started) .. " for " .. group:Duration() .. "s")
+        groupRow:SetTitle("Grouped with " .. ClassicWoT.table.cnt(group.dbEntry.players) .. " players " ..
+                "on " .. date("%A, %B %#d", group.dbEntry.started) .. " for " .. group:Duration() .. "s")
         groupRow:SetLayout("Flow")
         groupRow:SetRelativeWidth(1.0)
         scroll:AddChild(groupRow)
@@ -135,7 +126,7 @@ function ClassicWoTHistoryFrame:ShowGroupHistoryTab()
         zones:SetLayout("Flow")
         zones:SetRelativeWidth(1.0)
         groupRow:AddChild(zones)
-        
+
         if (ClassicWoT.table.cnt(group.dbEntry.zones)) == 0 then
             local zoneLabel = AceGUI:Create("Label")
             zoneLabel:SetWidth(100)
@@ -172,10 +163,10 @@ function ClassicWoTHistoryFrame:ShowGroupHistoryTab()
             playerRow:SetRelativeWidth(0.5)
             players:AddChild(playerRow)
 
-            local player = AceGUI:Create("InteractiveLabel")
-            player:SetWidth(100)
-            player:SetText(playerInfo.name)
-            playerRow:AddChild(player)
+            local playerName = AceGUI:Create("InteractiveLabel")
+            playerName:SetWidth(100)
+            playerName:SetText(playerInfo.name)
+            playerRow:AddChild(playerName)
 
             local score = AceGUI:Create("InteractiveLabel")
             score:SetWidth(100)
@@ -184,7 +175,7 @@ function ClassicWoTHistoryFrame:ShowGroupHistoryTab()
             else
                 score:SetText("score: nil")
             end
-            score:SetCallback("OnClick", function (button)
+            score:SetCallback("OnClick", function()
                 ClassicWoT:DebugPrint("cliiiiick: " .. playerInfo.name)
 
                 -- @TODO: can we get updates from edit frame to update the score here?
@@ -202,7 +193,7 @@ function ClassicWoTHistoryFrame:ShowGroupHistoryTab()
     end
 
     -- trigger layout update to fix blank first row 
-    scroll:DoLayout() 
+    scroll:DoLayout()
 end
 
 function ClassicWoTHistoryFrame:ShowWoTTab()
@@ -247,7 +238,7 @@ function ClassicWoTHistoryFrame:ShowWoTTab()
         else
             score:SetText("score: nil")
         end
-        score:SetCallback("OnClick", function (button)
+        score:SetCallback("OnClick", function()
             ClassicWoT:DebugPrint("cliiiiick: " .. playerInfo.name)
 
             -- @TODO: can we get updates from edit frame to update the score here?
@@ -269,7 +260,7 @@ function ClassicWoTHistoryFrame:ShowWoTTab()
         else
             note:SetText("note: nil")
         end
-        note:SetCallback("OnClick", function (button)
+        note:SetCallback("OnClick", function()
             ClassicWoT:DebugPrint("cliiiiick: " .. playerInfo.name)
 
             -- @TODO: can we get updates from edit frame to update the note here?
@@ -286,5 +277,5 @@ function ClassicWoTHistoryFrame:ShowWoTTab()
     end
 
     -- trigger layout update to fix blank first row 
-    scroll:DoLayout() 
+    scroll:DoLayout()
 end

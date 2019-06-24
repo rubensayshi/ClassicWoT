@@ -2,7 +2,7 @@
 local ClassicWoT = _G.ClassicWoT
 
 -- WoW API
-local time = _G.time
+local GetServerTime = _G.GetServerTime
 
 ---@class ClassicWoTCore
 local ClassicWoTCore = {}
@@ -51,5 +51,5 @@ function ClassicWoTCore:RealMe()
 end
 
 function ClassicWoTCore:Now()
-    return time()
+    return GetServerTime()
 end

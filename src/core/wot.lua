@@ -56,7 +56,7 @@ end
 function ClassicWoTWoT:IsTrusted(playerFull)
     local playerInfo = self:GetPlayerInfo(playerFull)
 
-    return playerInfo ~= nil and 
+    return playerInfo ~= nil and
             playerInfo.score ~= nil
             and playerInfo.score >= ClassicWoT.Config.Score.Trusted
 end

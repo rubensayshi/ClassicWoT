@@ -5,8 +5,8 @@ local ClassicWoT = _G.ClassicWoT
 local CURRENT_GROUP = ClassicWoT.Config.CURRENT_GROUP
 
 -- WoW API
-local CreateFrame, GetNumGroupMembers, GetRealZoneText, GetRaidRosterInfo =
-_G.CreateFrame, _G.GetNumGroupMembers, _G.GetRealZoneText, _G.GetRaidRosterInfo
+local CreateFrame, GetNumGroupMembers, GetRealZoneText, GetRaidRosterInfo, C_Timer =
+_G.CreateFrame, _G.GetNumGroupMembers, _G.GetRealZoneText, _G.GetRaidRosterInfo, _G.C_Timer
 
 ---@class ClassicWoTInteractionTracker
 ---@field DB table<string, table>
