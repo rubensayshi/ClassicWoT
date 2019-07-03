@@ -3,6 +3,27 @@ local ClassicWoT = _G.ClassicWoT
 -- list helpers
 ClassicWoT.list = {}
 
+ClassicWoT.list.contains = function(list, value)
+    for _, v in ipairs(list) do
+        if v == value then
+            return true
+        end
+    end
+
+    return false
+end
+
+ClassicWoT.list.filter = function(list, filterfn)
+    local result = {}
+    for _, v in ipairs(list) do
+        if filterfn(v) then
+            table.insert(result, v)
+        end
+    end
+
+    return result
+end
+
 ClassicWoT.list.reduce = function(list, fn, acc)
     for _, v in ipairs(list) do
         if acc == nil then

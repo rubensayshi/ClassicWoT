@@ -2,7 +2,7 @@
 local ClassicWoT = _G.ClassicWoT
 
 -- WoW API
-local time = _G.time
+local GetServerTime = _G.GetServerTime
 
 ---@class ClassicWoTCore
 local ClassicWoTCore = {}
@@ -18,19 +18,36 @@ setmetatable(ClassicWoTCore, {
 function ClassicWoTCore.new(player, realm)
     local self = setmetatable({}, ClassicWoTCore)
 
-    self.realm = realm
-    self.realme = self:PlayerFull(player, realm)
-    self.me = self.realme
+    self.InitMe(self, player, realm)
 
     return self
 end
 
-function ClassicWoTCore:PlayerFull(name, realm)
+function ClassicWoTCore:InitMe(player, realm)
+    ClassicWoT:DebugPrint("InitMe: " .. tostring(player)  .. ", " .. tostring(realm))
+    if realm == nil then
+        realm = "NaN"
+    end
+
+    self.realm = realm
+    self.realme = player
+    self.me = self.realme
+end
+
+function ClassicWoTCore:PlayerFull(player, realm)
     if realm == nil then
         realm = self.realm
     end
 
-    return name .. "-" .. realm
+    return player .. "-" .. realm
+end
+
+function ClassicWoTCore:IsMyRealm(realm)
+    return realm == nil or realm == self.realm
+end
+
+function ClassicWoTCore:MyRealm()
+    return self.realm
 end
 
 function ClassicWoTCore:Me()
@@ -41,6 +58,26 @@ function ClassicWoTCore:RealMe()
     return self.realme
 end
 
+function ClassicWoTCore:FullMe()
+    return self:PlayerFull(self.me)
+end
+
+function ClassicWoTCore:FullRealMe()
+    return self:PlayerFull(self.realme)
+end
+
+function ClassicWoTCore:SplitFullPlayer(fullPlayer)
+    local splt = ClassicWoT.SplitString(fullPlayer, "-")
+
+    return splt[1], splt[2]
+end
+
+function ClassicWoTCore:NormalizeFullPlayer(fullPlayer)
+    local name, realm = self:SplitFullPlayer(fullPlayer)
+
+    return self:PlayerFull(name, realm)
+end
+
 function ClassicWoTCore:Now()
-    return time()
+    return GetServerTime()
 end

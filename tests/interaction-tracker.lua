@@ -17,7 +17,7 @@ describe("ClassicWoT.InteractionTracker", function()
 
         local core = ClassicWoT.Core("Nub", "NubVille")
         local eventbus = ClassicWoT.EventBus()
-        local network = ClassicWoT.Network(core, eventbus)
+        local network = {SendObject = function() end}
         local wot = ClassicWoT.WoT(core, db, network, eventbus)
 
         ClassicWoT.InteractionTracker(core, db, eventbus, wot)
@@ -44,7 +44,7 @@ describe("ClassicWoT.InteractionTracker", function()
             -- mock core:Now() to return our mocked time
             function core:Now() return time end
             eventbus = ClassicWoT.EventBus()
-            network = ClassicWoT.Network(core, eventbus)
+            network = {SendObject = function() end}
             wot = ClassicWoT.WoT(core, db, network, eventbus)
             itracker = ClassicWoT.InteractionTracker(core, db, eventbus, wot)
         end)
@@ -68,8 +68,8 @@ describe("ClassicWoT.InteractionTracker", function()
                 -- first player joined
                 SetNumGroupMembers(2)
                 itracker:OnGroupRosterUpdate()
-                assert.spy(PlayerJoinedSpy).was_called_with(match.is_ref(itracker.CurrentGroup), "Player-2-NubVille")
-                assert.spy(PlayerMetSpy).was_called_with(match.is_ref(itracker), "Player-2-NubVille")
+                assert.spy(PlayerJoinedSpy).was_called_with(match.is_ref(itracker.CurrentGroup), "Player2-NubVille")
+                assert.spy(PlayerMetSpy).was_called_with(match.is_ref(itracker), "Player2-NubVille")
 
                 assert.is_false(itracker.CurrentGroup:IsNew())
 
@@ -113,10 +113,10 @@ describe("ClassicWoT.InteractionTracker", function()
                 -- we go invited to a 2 player party (so 2 + 1 = 3)
                 SetNumGroupMembers(3)
                 itracker:OnGroupRosterUpdate()
-                assert.spy(PlayerJoinedSpy).was_called_with(match.is_ref(itracker.CurrentGroup), "Player-2-NubVille")
-                assert.spy(PlayerJoinedSpy).was_called_with(match.is_ref(itracker.CurrentGroup), "Player-3-NubVille")
-                assert.spy(PlayerMetSpy).was_called_with(match.is_ref(itracker), "Player-2-NubVille")
-                assert.spy(PlayerMetSpy).was_called_with(match.is_ref(itracker), "Player-3-NubVille")
+                assert.spy(PlayerJoinedSpy).was_called_with(match.is_ref(itracker.CurrentGroup), "Player2-NubVille")
+                assert.spy(PlayerJoinedSpy).was_called_with(match.is_ref(itracker.CurrentGroup), "Player3-NubVille")
+                assert.spy(PlayerMetSpy).was_called_with(match.is_ref(itracker), "Player2-NubVille")
+                assert.spy(PlayerMetSpy).was_called_with(match.is_ref(itracker), "Player3-NubVille")
 
                 assert.is_false(itracker.CurrentGroup:IsNew())
 
@@ -139,20 +139,20 @@ describe("ClassicWoT.InteractionTracker", function()
                 -- we go invited to a 2 player party (so 2 + 1 = 3)
                 SetNumGroupMembers(3)
                 itracker:OnGroupRosterUpdate()
-                assert.spy(PlayerJoinedSpy).was_called_with(match.is_ref(itracker.CurrentGroup), "Player-2-NubVille")
-                assert.spy(PlayerJoinedSpy).was_called_with(match.is_ref(itracker.CurrentGroup), "Player-3-NubVille")
-                assert.spy(PlayerMetSpy).was_called_with(match.is_ref(itracker), "Player-2-NubVille")
-                assert.spy(PlayerMetSpy).was_called_with(match.is_ref(itracker), "Player-3-NubVille")
+                assert.spy(PlayerJoinedSpy).was_called_with(match.is_ref(itracker.CurrentGroup), "Player2-NubVille")
+                assert.spy(PlayerJoinedSpy).was_called_with(match.is_ref(itracker.CurrentGroup), "Player3-NubVille")
+                assert.spy(PlayerMetSpy).was_called_with(match.is_ref(itracker), "Player2-NubVille")
+                assert.spy(PlayerMetSpy).was_called_with(match.is_ref(itracker), "Player3-NubVille")
 
                 assert.is_false(itracker.CurrentGroup:IsNew())
 
                 -- another person got invited (so 3 + 1 = 4)
                 SetNumGroupMembers(4)
                 itracker:OnGroupRosterUpdate()
-                assert.spy(SyncPlayerSpy).was_called_with(match.is_ref(itracker.CurrentGroup), "Player-2-NubVille")
-                assert.spy(SyncPlayerSpy).was_called_with(match.is_ref(itracker.CurrentGroup), "Player-3-NubVille")
-                assert.spy(SyncPlayerSpy).was_called_with(match.is_ref(itracker.CurrentGroup), "Player-4-NubVille")
-                assert.spy(PlayerMetSpy).was_called_with(match.is_ref(itracker), "Player-4-NubVille")
+                assert.spy(SyncPlayerSpy).was_called_with(match.is_ref(itracker.CurrentGroup), "Player2-NubVille")
+                assert.spy(SyncPlayerSpy).was_called_with(match.is_ref(itracker.CurrentGroup), "Player3-NubVille")
+                assert.spy(SyncPlayerSpy).was_called_with(match.is_ref(itracker.CurrentGroup), "Player4-NubVille")
+                assert.spy(PlayerMetSpy).was_called_with(match.is_ref(itracker), "Player4-NubVille")
 
                 assert.is_false(itracker.CurrentGroup:IsNew())
 

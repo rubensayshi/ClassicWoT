@@ -42,3 +42,13 @@ function ClassicWoT:DebugPrintTable(t)
         print(dump(t))
     end
 end
+
+function ClassicWoT:PlayerChatLink(playerName, linkTitle)
+    if linkTitle == nil then
+        linkTitle = playerName
+    end
+
+    return ClassicWoT.Colors.SYSTEM_EVENT_YELLOW ..
+            "|Hplayer:" .. playerName .. "|h[" .. linkTitle .. "]|h" ..
+            ClassicWoT.Colors.WHITE
+end

@@ -22,7 +22,7 @@ local ClassicWoTConfig = {
         Prefix = "CWOT",
         Channel = {
             Name = "ClassicWoTNetwork",
-            Id = 1, -- will be set at runtime to channel ID when joined
+            Id = nil, -- will be set at runtime to channel ID when joined
         },
         Events = {
             SetScore = "CWOT_NE_SET_SCORE",

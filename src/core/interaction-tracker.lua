@@ -126,9 +126,9 @@ function ClassicWoTInteractionTracker:OnGroupRosterUpdate()
 
         for i = 1, numMembers do
             local playerName = GetRaidRosterInfo(i)
-            local playerFull = self.Core:PlayerFull(playerName)
+            local playerFull = self.Core:NormalizeFullPlayer(playerName)
 
-            if playerFull ~= self.Core:RealMe() then
+            if playerFull ~= self.Core:FullRealMe() then
                 ClassicWoT:DebugPrint(playerFull .. " is in the group")
 
                 if self.CurrentGroup:PlayerJoined(playerFull) then
@@ -143,9 +143,9 @@ function ClassicWoTInteractionTracker:OnGroupRosterUpdate()
 
         for i = 1, numMembers do
             local playerName = GetRaidRosterInfo(i)
-            local playerFull = self.Core:PlayerFull(playerName)
+            local playerFull = self.Core:NormalizeFullPlayer(playerName)
 
-            if playerFull ~= self.Core:RealMe() then
+            if playerFull ~= self.Core:FullRealMe() then
                 ClassicWoT:DebugPrint(playerFull .. " joined our group")
 
                 if self.CurrentGroup:SyncPlayer(playerFull) then
@@ -157,7 +157,7 @@ function ClassicWoTInteractionTracker:OnGroupRosterUpdate()
 end
 
 function ClassicWoTInteractionTracker:PlayerMet(playerFull)
-    if playerFull == self.Core:RealMe() then
+    if playerFull == self.Core:FullRealMe() then
         return
     end
 

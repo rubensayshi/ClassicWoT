@@ -2,8 +2,8 @@
 local ClassicWoT = _G.ClassicWoT
 
 -- WoW API
-local GameTooltip, IsShiftKeyDown, UnitName =
-_G.GameTooltip, _G.IsShiftKeyDown, _G.UnitName
+local GameTooltip, IsShiftKeyDown, UnitFullName =
+_G.GameTooltip, _G.IsShiftKeyDown, _G.UnitFullName
 
 ---@class ClassicWoTTooltip
 ---@field Core ClassicWoTCore
@@ -43,13 +43,14 @@ function ClassicWoTTooltip:OnTooltipSetUnit()
         return
     end
 
-    local playerFull = self.Core:PlayerFull(UnitName(playerUnitID))
+    -- @TODO: verify UnitFullName works properly here
+    local playerFull = self.Core:NormalizeFullPlayer(UnitFullName(playerUnitID))
     if playerFull == nil then
         return
     end
 
     -- don't add WoT to own tooltip
-    if playerFull == self.Core:RealMe() then
+    if playerFull == self.Core:FullRealMe() then
         return
     end
 

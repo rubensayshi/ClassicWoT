@@ -40,12 +40,17 @@ function ClassicWoT:OnInitialize()
     self.Tooltip = ClassicWoT.Tooltip(self.Core, self.WoT)
     self.SlashWho = ClassicWoT.SlashWho(self.Core, self.WoT)
 
-    self:DebugPrint("me: " .. self.Core:RealMe())
+    self:DebugPrint("me: " .. self.Core:FullRealMe())
 end
 
 function ClassicWoT:OnEnable()
     -- debug print, will also help us know if debugging is enabled
     self:DebugPrint("ClassicWoT:OnEnable")
+
+    -- determine who we are
+    local player, realm = UnitFullName("player")
+    self.Core:InitMe(player, realm)
+    self:DebugPrint("me: " .. self.Core:FullRealMe())
 
     -- init the chat channel we use for "networking"
     self.Network:InitChannel()

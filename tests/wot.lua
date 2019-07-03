@@ -3,8 +3,9 @@ ClassicWoT = require("testbase")
 
 describe("ClassicWoT.Network", function()
     it("can be initialized", function()
-        db = LibStub("AceDB-3.0"):New("ClassicWoT_DB", ClassicWoT.DefaultDB, true)
-        ClassicWoT.WoT(ClassicWoT.Core("Nub", "NubVille"), db, ClassicWoT.Network(), ClassicWoT.EventBus())
+        local db = LibStub("AceDB-3.0"):New("ClassicWoT_DB", ClassicWoT.DefaultDB, true)
+        local network = {SendObject = function() end}
+        ClassicWoT.WoT(ClassicWoT.Core("Nub", "NubVille"), db, network, ClassicWoT.EventBus())
     end)
 
     describe("setting scores", function()
@@ -19,7 +20,7 @@ describe("ClassicWoT.Network", function()
             db:ResetDB()
             core = ClassicWoT.Core("Nub", "NubVille")
             eventbus = ClassicWoT.EventBus()
-            network = ClassicWoT.Network(core, eventbus)
+            network = {SendObject = function() end}
             wot = ClassicWoT.WoT(core, db, network, eventbus)
         end)
 
@@ -53,7 +54,7 @@ describe("ClassicWoT.Network", function()
             db:ResetDB()
             core = ClassicWoT.Core("Nub", "NubVille")
             eventbus = ClassicWoT.EventBus()
-            network = ClassicWoT.Network(core, eventbus)
+            network = {SendObject = function() end}
             wot = ClassicWoT.WoT(core, db, network, eventbus)
         end)
 
@@ -89,7 +90,7 @@ describe("ClassicWoT.Network", function()
             db:ResetDB()
             core = ClassicWoT.Core("Nub", "NubVille")
             eventbus = ClassicWoT.EventBus()
-            network = ClassicWoT.Network(core, eventbus)
+            network = {SendObject = function() end}
             wot = ClassicWoT.WoT(core, db, network, eventbus)
         end)
 
