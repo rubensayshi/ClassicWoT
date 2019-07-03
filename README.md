@@ -42,3 +42,7 @@ We do still use the `-3.0` suffix in the code to load them through `LibStub` so 
  
 ## Honorable mention
 I used https://github.com/DomenikIrrgang/ClassicLFG as boilerplate for the eventbus and network code <3.
+
+## Release Process
+Travis builds the releases and pushes to Curseforge and WoWInterface when `UPLOADRELEASE=y` is set in env vars 
+(set through travis control panel).

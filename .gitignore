@@ -1,2 +1,5 @@
 *.rockspec
 luacov*.out
+.release
+libs
+/env

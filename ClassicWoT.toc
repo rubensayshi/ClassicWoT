@@ -1,6 +1,6 @@
-## Interface: 80100
+## Interface: 11302
 ## Title: ClassicWoT
-## Author: Suu
+## Author: rubensayshi
 ## Version: @project-version@
 ## Notes: World of Web of Trust
 ## DefaultState: Enabled
@@ -10,7 +10,9 @@
 libs.xml
 
 src\main.lua
+#@debug@
 src\dev.lua
+#@end-debug@
 src\config.lua
 src\defaultdb.lua
 src\util\util.lua
